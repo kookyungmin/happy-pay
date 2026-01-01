@@ -40,6 +40,14 @@ MSA, 헥사고날 아키텍처 기반 간편 결제 시스템
 
 ![Membership Sequence Example](image/Membership_Sequence_Example.png)
 
+```
+# 이미지 빌드
+./gradlew :membership-service:jibDockerBuild
+
+# 이미지 빌드 후 dockerhub push
+./gradle :membership-service:jib
+```
+
 ### Banking Service
 
 고객의 계좌 정보 등록, 등록된 계좌 정보 조회, 입/출금, 거래내역 조회 등의 기능을 제공하는 서비스

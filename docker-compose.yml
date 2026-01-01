@@ -1,0 +1,32 @@
+services:
+  mysql:
+    image: mysql:8.0.33
+    networks:
+      - happypay_network
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ~/study/docker/happypay/mysql:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "13306:3306"
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=rootlocal
+      - MYSQL_USER=local
+      - MYSQL_PASSWORD=local
+      - MYSQL_DATABASE=happypay
+  membership-service:
+    image: happy-pay-membership-service:0.0.1
+    pull_policy: never # 운영 환경에서는 always
+    networks:
+      - happypay_network
+    ports:
+      - "18081:8080"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+
+networks:
+  happypay_network:
+    driver: bridge
