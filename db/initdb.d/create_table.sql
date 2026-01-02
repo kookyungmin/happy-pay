@@ -31,4 +31,21 @@ create table banking.firm_banking_request (
   to_bank_account_number varchar(255),
   to_bank_name varchar(255),
   primary key (id)
-) engine=InnoDB
+) engine=InnoDB;
+
+create table money.member_money (
+  balance integer not null,
+  id bigint not null auto_increment,
+  membership_id varchar(255),
+  primary key (id)
+) engine=InnoDB;
+
+create table money.money_changing_request (
+    money_amount integer not null,
+    id bigint not null auto_increment,
+    message varchar(255),
+    target_membership_id varchar(255),
+    request_type enum ('DECREASE','INCREASE'),
+    status enum ('CANCELLED','FAILED','REQUESTED','SUCCESS'),
+    primary key (id)
+) engine=InnoDB;
