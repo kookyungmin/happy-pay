@@ -16,6 +16,7 @@ MSA, 헥사고날 아키텍처 기반 간편 결제 시스템
 - [springboot] 3.5.8
 - [docker] 29.1.1
 - [kafka] 7.3.10
+- [kafka-ui] 0.7.2 
 - [zookeeper] 7.3.10
 - [redis] 7.2.5
 - [mysql] 8.0.33
