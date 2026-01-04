@@ -64,12 +64,15 @@ public class MoneyChangingRequestService implements IncreaseMoneyRequestUseCase,
           new MemberMoney.Balance(command.getMoneyAmount())
       );
       moneyChangingRequest.success();
+    } else {
+      moneyChangingRequest.failed("failed to increase money.");
     }
 
     return saveMoneyChangingRequestPort.updateMoneyChangingStatus(
         new MoneyChangingRequest.MoneyChangingRequestId(
             moneyChangingRequest.getMoneyChangingRequestId()),
-        new MoneyChangingRequest.RequestStatus(moneyChangingRequest.getRequestStatus())
+        new MoneyChangingRequest.RequestStatus(moneyChangingRequest.getRequestStatus()),
+        new MoneyChangingRequest.Message(moneyChangingRequest.getMessage())
     );
   }
 

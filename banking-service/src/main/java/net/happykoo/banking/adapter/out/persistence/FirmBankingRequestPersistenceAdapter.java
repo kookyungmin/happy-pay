@@ -10,6 +10,7 @@ import net.happykoo.banking.domain.FirmBankingRequest.FirmBankingRequestId;
 import net.happykoo.banking.domain.FirmBankingRequest.FirmBankingStatus;
 import net.happykoo.banking.domain.FirmBankingRequest.FromBankAccountNumber;
 import net.happykoo.banking.domain.FirmBankingRequest.FromBankName;
+import net.happykoo.banking.domain.FirmBankingRequest.Message;
 import net.happykoo.banking.domain.FirmBankingRequest.MoneyAmount;
 import net.happykoo.banking.domain.FirmBankingRequest.ToBankAccountNumber;
 import net.happykoo.banking.domain.FirmBankingRequest.ToBankName;
@@ -47,13 +48,16 @@ public class FirmBankingRequestPersistenceAdapter implements SaveFirmBankingRequ
   @Override
   public FirmBankingRequest updateFirmBankingStatus(
       FirmBankingRequestId firmBankingRequestId,
-      FirmBankingStatus firmBankingStatus) {
+      FirmBankingStatus firmBankingStatus,
+      Message message
+  ) {
     var entity = jpaFirmBankingRequestRepository.findById(
             Long.parseLong(firmBankingRequestId.value())
         )
         .orElseThrow(() -> new EntityNotFoundException(
             "entity does not exists : " + firmBankingRequestId.value()));
     entity.setStatus(firmBankingStatus.value());
+    entity.setErrorMsg(message.value());
 
     jpaFirmBankingRequestRepository.save(entity);
 

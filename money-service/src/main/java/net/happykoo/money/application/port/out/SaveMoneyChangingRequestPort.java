@@ -12,6 +12,7 @@ public interface SaveMoneyChangingRequestPort {
 
   MoneyChangingRequest updateMoneyChangingStatus(
       MoneyChangingRequest.MoneyChangingRequestId moneyChangingRequestId,
-      MoneyChangingRequest.RequestStatus requestStatus
+      MoneyChangingRequest.RequestStatus requestStatus,
+      MoneyChangingRequest.Message message
   );
 }

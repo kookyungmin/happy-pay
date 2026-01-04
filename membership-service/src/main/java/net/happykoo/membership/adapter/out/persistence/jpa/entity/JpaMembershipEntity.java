@@ -14,7 +14,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString
-public class MembershipJpaEntity {
+public class JpaMembershipEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class MembershipJpaEntity {
 
   private boolean isCorp;
 
-  public MembershipJpaEntity(
+  public JpaMembershipEntity(
       Long id,
       String name,
       String email,
@@ -46,7 +46,7 @@ public class MembershipJpaEntity {
     this.isCorp = isCorp;
   }
 
-  public MembershipJpaEntity(
+  public JpaMembershipEntity(
       String name,
       String email,
       String address,

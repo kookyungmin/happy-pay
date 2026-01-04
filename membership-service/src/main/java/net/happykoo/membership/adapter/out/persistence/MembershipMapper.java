@@ -1,13 +1,13 @@
 package net.happykoo.membership.adapter.out.persistence;
 
-import net.happykoo.membership.adapter.out.persistence.jpa.entity.MembershipJpaEntity;
+import net.happykoo.membership.adapter.out.persistence.jpa.entity.JpaMembershipEntity;
 import net.happykoo.membership.domain.Membership;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MembershipMapper {
 
-  Membership mapToDomainEntity(MembershipJpaEntity entity) {
+  Membership mapToDomainEntity(JpaMembershipEntity entity) {
     return Membership.generateMember(
         new Membership.MembershipId(entity.getId().toString()),
         new Membership.MembershipName(entity.getName()),

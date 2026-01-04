@@ -1,7 +1,7 @@
 package net.happykoo.banking.adapter.out.external.membership;
 
 import lombok.extern.slf4j.Slf4j;
-import net.happykoo.banking.application.port.out.RequestMembershipPort;
+import net.happykoo.banking.application.port.out.RequestMembershipInfoPort;
 import net.happykoo.banking.application.port.out.data.MembershipData;
 import net.happykoo.banking.domain.RegisteredBankAccount.MembershipId;
 import net.happykoo.common.annotation.ExternalSystemAdapter;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 @ExternalSystemAdapter
 @Slf4j
-public class MembershipExternalAdapter implements RequestMembershipPort {
+public class MembershipExternalAdapter implements RequestMembershipInfoPort {
 
   private final CommonHttpClient commonHttpClient;
   private final String membershipServiceUrl;

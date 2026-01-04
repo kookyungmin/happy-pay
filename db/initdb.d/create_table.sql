@@ -49,3 +49,16 @@ create table money.money_changing_request (
     status enum ('CANCELLED','FAILED','REQUESTED','SUCCESS'),
     primary key (id)
 ) engine=InnoDB;
+
+create table remittance.remittance_request (
+    amount integer not null,
+    id bigint not null,
+    error_msg varchar(255),
+    from_membership_id varchar(255),
+    to_bank_account_number varchar(255),
+    to_bank_name varchar(255),
+    to_membership_id varchar(255),
+    remittance_status enum ('FAILED','REQUESTED','SUCCESS'),
+    remittance_type enum ('BANK','MEMBERSHIP'),
+    primary key (id)
+) engine=InnoDB

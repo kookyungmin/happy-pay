@@ -14,6 +14,7 @@ import net.happykoo.banking.domain.FirmBankingRequest.FirmBankingRequestId;
 import net.happykoo.banking.domain.FirmBankingRequest.FirmBankingStatus;
 import net.happykoo.banking.domain.FirmBankingRequest.FromBankAccountNumber;
 import net.happykoo.banking.domain.FirmBankingRequest.FromBankName;
+import net.happykoo.banking.domain.FirmBankingRequest.Message;
 import net.happykoo.banking.domain.FirmBankingRequest.MoneyAmount;
 import net.happykoo.banking.domain.FirmBankingRequest.ToBankAccountNumber;
 import net.happykoo.banking.domain.FirmBankingRequest.ToBankName;
@@ -69,7 +70,8 @@ public class RequestFirmBankingService implements RequestFirmBankingUseCase {
     //4. 결과에 따라 1번 작성했던 상태 update
     return saveFirmBankingRequestPort.updateFirmBankingStatus(
         new FirmBankingRequestId(firmBankingRequest.getFirmBankingRequestId()),
-        new FirmBankingStatus(firmBankingRequest.getFirmBankingStatus())
+        new FirmBankingStatus(firmBankingRequest.getFirmBankingStatus()),
+        new Message(firmBankingRequest.getMessage())
     );
   }
 }

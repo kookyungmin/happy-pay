@@ -2,7 +2,7 @@ package net.happykoo.banking.application.port.out;
 
 import net.happykoo.banking.domain.RegisteredBankAccount;
 
-public interface RequestMembershipPort {
+public interface RequestMembershipInfoPort {
 
   boolean existsMembership(RegisteredBankAccount.MembershipId membershipId);
 }

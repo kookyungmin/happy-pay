@@ -37,6 +37,11 @@ public class MoneyChangingRequest {
     this.requestStatus = MoneyChangingRequestStatus.SUCCESS;
   }
 
+  public void failed(String errorMessage) {
+    this.requestStatus = MoneyChangingRequestStatus.FAILED;
+    this.message = errorMessage;
+  }
+
   public record MoneyChangingRequestId(String value) {
 
   }

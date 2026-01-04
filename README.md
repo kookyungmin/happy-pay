@@ -83,6 +83,14 @@ MSA, 헥사고날 아키텍처 기반 간편 결제 시스템
 
 ![Remittance_Sequence_Example](image/Remittance_Sequence_Example.png)
 
+```
+# 이미지 빌드
+./gradlew :remittance-service:jibDockerBuild
+
+# 이미지 빌드 후 dockerhub push
+./gradle :remittance-service:jib
+```
+
 ### Payment Service
 
 가맹점에서 Happy Pay 를 이용한 간편 결제 및 결제 내역 조회 등의 기능을 제공하는 서비스

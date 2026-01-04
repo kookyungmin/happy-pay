@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import net.happykoo.common.annotation.PersistenceAdapter;
 import net.happykoo.membership.adapter.out.persistence.jpa.JpaMembershipRepository;
-import net.happykoo.membership.adapter.out.persistence.jpa.entity.MembershipJpaEntity;
+import net.happykoo.membership.adapter.out.persistence.jpa.entity.JpaMembershipEntity;
 import net.happykoo.membership.application.port.out.FindMembershipPort;
 import net.happykoo.membership.application.port.out.ModifyMembershipPort;
 import net.happykoo.membership.application.port.out.RegisterMembershipPort;
@@ -26,7 +26,7 @@ public class MembershipPersistenceAdapter implements RegisterMembershipPort, Fin
       Membership.MembershipAddress membershipAddress,
       Membership.MembershipIsCorp membershipIsCorp
   ) {
-    var entity = jpaMembershipRepository.save(new MembershipJpaEntity(
+    var entity = jpaMembershipRepository.save(new JpaMembershipEntity(
         membershipName.value(),
         membershipEmail.value(),
         membershipAddress.value(),

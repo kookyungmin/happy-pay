@@ -6,6 +6,7 @@ import net.happykoo.money.adapter.out.persistence.jpa.JpaMoneyChangingRequestRep
 import net.happykoo.money.adapter.out.persistence.jpa.entity.JpaMoneyChangingRequestEntity;
 import net.happykoo.money.application.port.out.SaveMoneyChangingRequestPort;
 import net.happykoo.money.domain.MoneyChangingRequest;
+import net.happykoo.money.domain.MoneyChangingRequest.Message;
 import net.happykoo.money.domain.MoneyChangingRequest.MoneyAmount;
 import net.happykoo.money.domain.MoneyChangingRequest.MoneyChangingRequestId;
 import net.happykoo.money.domain.MoneyChangingRequest.RequestStatus;
@@ -41,13 +42,15 @@ public class MoneyChangingRequestPersistenceAdapter implements SaveMoneyChanging
   @Override
   public MoneyChangingRequest updateMoneyChangingStatus(
       MoneyChangingRequestId moneyChangingRequestId,
-      RequestStatus requestStatus
+      RequestStatus requestStatus,
+      Message message
   ) {
     var entity = jpaMoneyChangingRequestRepository.findById(
             Long.parseLong(moneyChangingRequestId.value()))
         .orElseThrow(() -> new IllegalArgumentException(
             "entity does not exists : " + moneyChangingRequestId.value()));
     entity.setStatus(requestStatus.value());
+    entity.setMessage(message.value());
 
     return moneyChangingRequestMapper.mapToDomainEntity(
         jpaMoneyChangingRequestRepository.save(entity));
