@@ -114,6 +114,22 @@ kafka-topics --create --bootstrap-server localhost:9092 \
     --topic happypay.logging.out.stdout
 ```
 
+```
+kafka-topics --create --bootstrap-server localhost:9092 \
+    --partitions 1  \
+    --replication-factor 1 \
+    --config min.insync.replicas=1 \
+    --topic happypay.task.recharge
+```
+
+```
+kafka-topics --create --bootstrap-server localhost:9092 \
+    --partitions 1  \
+    --replication-factor 1 \
+    --config min.insync.replicas=1 \
+    --topic happypay.task.recharge.result
+```
+
 
 
 
