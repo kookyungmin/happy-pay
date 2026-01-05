@@ -11,16 +11,19 @@ public class MemberMoney {
   private final String memberMoneyId;
   private final String membershipId;
   private final int balance;
+  private final String eventStreamId;
 
   public static MemberMoney generateMemberMoney(
       MemberMoneyId memberMoneyId,
       MembershipId membershipId,
-      Balance balance
+      Balance balance,
+      EventStreamId eventStreamId
   ) {
     return new MemberMoney(
         memberMoneyId.value(),
         membershipId.value(),
-        balance.value()
+        balance.value(),
+        eventStreamId.value()
     );
   }
 
@@ -33,6 +36,10 @@ public class MemberMoney {
   }
 
   public record Balance(int value) {
+
+  }
+
+  public record EventStreamId(String value) {
 
   }
 

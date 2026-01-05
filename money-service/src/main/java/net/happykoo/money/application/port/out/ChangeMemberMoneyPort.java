@@ -8,5 +8,4 @@ public interface ChangeMemberMoneyPort {
       MemberMoney.MembershipId membershipId,
       MemberMoney.Balance balance
   );
-
 }

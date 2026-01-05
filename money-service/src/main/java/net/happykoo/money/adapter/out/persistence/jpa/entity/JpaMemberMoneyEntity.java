@@ -19,21 +19,25 @@ public class JpaMemberMoneyEntity {
   private Long id;
   private String membershipId;
   private int balance;
+  private String eventStreamId;
 
   public JpaMemberMoneyEntity(
       Long id,
       String membershipId,
-      int balance
+      int balance,
+      String eventStreamId
   ) {
     this.id = id;
     this.membershipId = membershipId;
     this.balance = balance;
+    this.eventStreamId = eventStreamId;
   }
 
   public JpaMemberMoneyEntity(
       String membershipId,
-      int balance
+      int balance,
+      String eventStreamId
   ) {
-    this(null, membershipId, balance);
+    this(null, membershipId, balance, eventStreamId);
   }
 }

@@ -10,3 +10,20 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+        jdbc:
+          time_zone: Asia/Seoul
+axon:
+  axonserver:
+    servers: axon-server:8124
+logging:
+  topic: happypay.logging.out.stdout
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: INFO

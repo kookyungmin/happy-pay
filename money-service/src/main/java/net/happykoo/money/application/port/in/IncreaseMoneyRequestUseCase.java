@@ -7,4 +7,6 @@ public interface IncreaseMoneyRequestUseCase {
 
   MoneyChangingRequest increaseMoneyRequest(IncreaseMoneyRequestCommand command);
 
+  void increaseMoneyRequestByEvent(
+      IncreaseMoneyRequestCommand command);
 }

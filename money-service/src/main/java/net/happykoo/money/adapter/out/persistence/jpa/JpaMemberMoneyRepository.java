@@ -8,4 +8,5 @@ public interface JpaMemberMoneyRepository extends JpaRepository<JpaMemberMoneyEn
 
   Optional<JpaMemberMoneyEntity> findByMembershipId(String membershipId);
 
+  boolean existsByMembershipId(String membershipId);
 }

@@ -3,6 +3,10 @@ description = "HappyPay Money"
 
 dependencies {
     implementation(project(":common"))
+
+    implementation("org.axonframework:axon-spring-boot-starter:4.12.2")
+
+
     runtimeOnly("com.h2database:h2")
     runtimeOnly("com.mysql:mysql-connector-j")
 }

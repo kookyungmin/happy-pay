@@ -1,4 +1,16 @@
 services:
+  axon-server:
+    image: axoniq/axonserver:latest-jdk-17-nonroot
+    networks:
+      - happypay_network
+    ports:
+      - "18024:8024"
+      - "18124:8124"
+    volumes:
+      - ~/study/docker/happypay/axon-server/data:/axonserver/data
+      - ~/study/docker/happypay/axon-server/events:/axonserver/events
+      - ~/study/docker/happypay/axon-server/config:/axonserver/config:ro
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.10
     ports:

@@ -29,3 +29,10 @@ logging:
         orm:
           jdbc:
             bind: TRACE
+axon:
+  axonserver:
+    servers: localhost:18124
+  serializer:
+    events: jackson
+    messages: jackson
+    general: xstream
