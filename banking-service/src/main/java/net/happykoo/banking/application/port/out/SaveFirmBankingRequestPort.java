@@ -14,7 +14,7 @@ public interface SaveFirmBankingRequestPort {
 
   FirmBankingRequest updateFirmBankingStatus(
       FirmBankingRequest.FirmBankingRequestId firmBankingRequestId,
-      FirmBankingRequest.FirmBankingStatus firmBankingStatus,
+      FirmBankingRequest.RequestStatus firmBankingStatus,
       FirmBankingRequest.Message message
   );
 }

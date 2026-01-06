@@ -74,3 +74,13 @@ CREATE TABLE money.token_entry (
 );
 
 alter table money.member_money add column event_stream_id varchar(255);
+
+CREATE TABLE banking.token_entry (
+   processor_name VARCHAR(255) NOT NULL,
+   segment INT NOT NULL,
+   owner VARCHAR(255),
+   timestamp VARCHAR(255) NOT NULL,
+   token BLOB,
+   token_type VARCHAR(255),
+   PRIMARY KEY (processor_name, segment)
+);

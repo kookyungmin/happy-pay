@@ -16,9 +16,9 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 
 @Aggregate
-@Slf4j
 @NoArgsConstructor
 @Getter
+@Slf4j
 public class AxonMemberMoneyAggregate {
 
   @AggregateIdentifier

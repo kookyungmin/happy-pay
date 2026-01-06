@@ -28,6 +28,7 @@ public class JpaFirmBankingRequestEntity {
   @Enumerated(value = EnumType.STRING)
   private FirmBankingRequestStatus status;
   private String errorMsg;
+  private String eventStreamId;
 
   public JpaFirmBankingRequestEntity(
       Long id,
@@ -37,7 +38,8 @@ public class JpaFirmBankingRequestEntity {
       String toBankAccountNumber,
       int moneyAmount,
       FirmBankingRequestStatus status,
-      String errorMsg
+      String errorMsg,
+      String eventStreamId
   ) {
     this.id = id;
     this.fromBankName = fromBankName;
@@ -47,6 +49,7 @@ public class JpaFirmBankingRequestEntity {
     this.moneyAmount = moneyAmount;
     this.status = status;
     this.errorMsg = errorMsg;
+    this.eventStreamId = eventStreamId;
   }
 
   public JpaFirmBankingRequestEntity(
@@ -56,7 +59,8 @@ public class JpaFirmBankingRequestEntity {
       String toBankAccountNumber,
       int moneyAmount,
       FirmBankingRequestStatus status,
-      String errorMsg
+      String errorMsg,
+      String eventStreamId
   ) {
     this(null,
         fromBankName,
@@ -65,6 +69,7 @@ public class JpaFirmBankingRequestEntity {
         toBankAccountNumber,
         moneyAmount,
         status,
-        errorMsg);
+        errorMsg,
+        eventStreamId);
   }
 }

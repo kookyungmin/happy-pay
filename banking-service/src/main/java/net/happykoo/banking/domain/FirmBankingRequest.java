@@ -20,11 +20,11 @@ public class FirmBankingRequest {
 
   private final int moneyAmount; //only won
 
-  private FirmBankingRequestStatus firmBankingStatus;
+  private FirmBankingRequestStatus requestStatus;
   private String message;
 
   public void failed(String message) {
-    this.firmBankingStatus = FirmBankingRequestStatus.FAILED;
+    this.requestStatus = FirmBankingRequestStatus.FAILED;
     this.message = message;
   }
 
@@ -35,7 +35,7 @@ public class FirmBankingRequest {
       ToBankName toBankName,
       ToBankAccountNumber toBankAccountNumber,
       MoneyAmount moneyAmount,
-      FirmBankingStatus firmBankingStatus,
+      RequestStatus firmBankingStatus,
       Message message
   ) {
     return new FirmBankingRequest(
@@ -51,7 +51,7 @@ public class FirmBankingRequest {
   }
 
   public void success() {
-    this.firmBankingStatus = FirmBankingRequestStatus.SUCCESS;
+    this.requestStatus = FirmBankingRequestStatus.SUCCESS;
   }
 
   public record FirmBankingRequestId(String value) {
@@ -78,7 +78,7 @@ public class FirmBankingRequest {
 
   }
 
-  public record FirmBankingStatus(FirmBankingRequestStatus value) {
+  public record RequestStatus(FirmBankingRequestStatus value) {
 
   }
 

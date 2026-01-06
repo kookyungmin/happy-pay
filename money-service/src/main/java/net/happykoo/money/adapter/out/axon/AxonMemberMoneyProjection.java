@@ -12,7 +12,7 @@ import org.axonframework.eventhandling.EventHandler;
 @EventAdapter
 @RequiredArgsConstructor
 @Slf4j
-public class MemberMoneyProjection {
+public class AxonMemberMoneyProjection {
 
   private final JpaMemberMoneyRepository jpaMemberMoneyRepository;
 

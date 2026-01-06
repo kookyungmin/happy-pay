@@ -1,9 +1,15 @@
 package net.happykoo.banking.application.service;
 
 import jakarta.transaction.Transactional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.happykoo.banking.application.axon.command.AxonCreateFirmBankingRequestCommand;
+import net.happykoo.banking.application.axon.command.AxonUpdateFirmBankingRequestStatusCommand;
 import net.happykoo.banking.application.port.in.RequestFirmBankingUseCase;
+import net.happykoo.banking.application.port.in.UpdateFirmBankingStatusUseCase;
 import net.happykoo.banking.application.port.in.command.RequestFirmBankingCommand;
+import net.happykoo.banking.application.port.in.command.UpdateFirmBankingStatusCommand;
 import net.happykoo.banking.application.port.out.RequestBankAccountInfoPort;
 import net.happykoo.banking.application.port.out.RequestFirmBankingPort;
 import net.happykoo.banking.application.port.out.SaveFirmBankingRequestPort;
@@ -11,22 +17,27 @@ import net.happykoo.banking.application.port.out.payload.BankAccountPayload;
 import net.happykoo.banking.application.port.out.payload.FirmBankingPayload;
 import net.happykoo.banking.domain.FirmBankingRequest;
 import net.happykoo.banking.domain.FirmBankingRequest.FirmBankingRequestId;
-import net.happykoo.banking.domain.FirmBankingRequest.FirmBankingStatus;
 import net.happykoo.banking.domain.FirmBankingRequest.FromBankAccountNumber;
 import net.happykoo.banking.domain.FirmBankingRequest.FromBankName;
 import net.happykoo.banking.domain.FirmBankingRequest.Message;
 import net.happykoo.banking.domain.FirmBankingRequest.MoneyAmount;
+import net.happykoo.banking.domain.FirmBankingRequest.RequestStatus;
 import net.happykoo.banking.domain.FirmBankingRequest.ToBankAccountNumber;
 import net.happykoo.banking.domain.FirmBankingRequest.ToBankName;
 import net.happykoo.common.annotation.UseCase;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 
 @UseCase
 @RequiredArgsConstructor
-public class RequestFirmBankingService implements RequestFirmBankingUseCase {
+@Slf4j
+public class FirmBankingService implements RequestFirmBankingUseCase,
+    UpdateFirmBankingStatusUseCase {
 
   private final SaveFirmBankingRequestPort saveFirmBankingRequestPort;
   private final RequestBankAccountInfoPort requestBankAccountInfoPort;
   private final RequestFirmBankingPort requestFirmBankingPort;
+
+  private final CommandGateway commandGateway;
 
   @Override
   @Transactional
@@ -70,8 +81,48 @@ public class RequestFirmBankingService implements RequestFirmBankingUseCase {
     //4. 결과에 따라 1번 작성했던 상태 update
     return saveFirmBankingRequestPort.updateFirmBankingStatus(
         new FirmBankingRequestId(firmBankingRequest.getFirmBankingRequestId()),
-        new FirmBankingStatus(firmBankingRequest.getFirmBankingStatus()),
+        new RequestStatus(firmBankingRequest.getRequestStatus()),
         new Message(firmBankingRequest.getMessage())
     );
+  }
+
+  @Override
+  public void requestFirmBankingByEvent(RequestFirmBankingCommand command) {
+    AxonCreateFirmBankingRequestCommand axonCreateFirmBankingRequestCommand = new AxonCreateFirmBankingRequestCommand(
+        UUID.randomUUID().toString(),
+        command.getFromBankName(),
+        command.getFromBankAccountNumber(),
+        command.getToBankName(),
+        command.getToBankAccountNumber(),
+        command.getMoneyAmount()
+    );
+
+    //1. CreateFirmBankingRequestEvent -> EventStore 에 저장
+    //2. Projection -> JPA 로 읽기용 DB 에 데이터 저장
+    //3. Saga -> 계좌 유효상태 확인 및 펌뱅킹 실행 -> 성공/실패 여부에 따라 분기하여 Command 발송
+    //4. Projection -> JPA 로 읽기용 DB 에 status 저장
+    commandGateway.send(axonCreateFirmBankingRequestCommand)
+        .whenComplete((result, throwable) -> {
+          if (throwable != null) {
+            log.error("AxonCreateFirmBankingRequestCommand failed", throwable);
+          }
+        });
+
+  }
+
+  @Override
+  public void updateFirmBankingStatus(UpdateFirmBankingStatusCommand command) {
+    AxonUpdateFirmBankingRequestStatusCommand axonUpdateFirmBankingRequestStatusCommand = new AxonUpdateFirmBankingRequestStatusCommand(
+        command.getEventStreamId(),
+        command.getStatus(),
+        command.getErrorMessage()
+    );
+
+    commandGateway.send(axonUpdateFirmBankingRequestStatusCommand)
+        .whenComplete((result, throwable) -> {
+          if (throwable != null) {
+            log.error("axonUpdateFirmBankingRequestStatusCommand failed", throwable);
+          }
+        });
   }
 }

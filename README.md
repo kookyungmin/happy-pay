@@ -122,8 +122,12 @@ Axon Framework 프로세스
     ↓ commit
 [EventProcessor]
     ↓
-[@EventHandler / Saga / Projection]
+[@EventHandler / Saga(비즈니스 로직, 흐름 제어) / Projection(읽기용 DB Write)]
 ```
+
+Axon Framework 로 EDA(Event Data Architecture) 를 구축하고,
+
+Axon Server(오케스트레이터)가 EventStore 를 통해 Aggregate 의 변경 이력(Event)들을 저장한다. 
 
 
 
