@@ -20,3 +20,11 @@ axon:
 service:
   membership:
     url: http://membership-service:8080
+logging:
+  topic: happypay.logging.out.stdout
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: INFO

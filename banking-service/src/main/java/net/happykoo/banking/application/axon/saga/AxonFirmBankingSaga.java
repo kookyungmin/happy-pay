@@ -1,6 +1,7 @@
 package net.happykoo.banking.application.axon.saga;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.happykoo.banking.application.axon.command.AxonUpdateFirmBankingRequestStatusCommand;
 import net.happykoo.banking.application.port.out.RequestBankAccountInfoPort;
 import net.happykoo.banking.application.port.out.RequestFirmBankingPort;
@@ -8,20 +9,29 @@ import net.happykoo.banking.application.port.out.payload.BankAccountPayload;
 import net.happykoo.banking.application.port.out.payload.FirmBankingPayload;
 import net.happykoo.banking.domain.FirmBankingRequestStatus;
 import net.happykoo.banking.domain.axon.event.AxonCreateFirmBankingRequestEvent;
+import net.happykoo.banking.domain.axon.event.AxonUpdateFirmBankingRequestStatusEvent;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.modelling.saga.EndSaga;
 import org.axonframework.modelling.saga.SagaEventHandler;
+import org.axonframework.modelling.saga.StartSaga;
 import org.axonframework.spring.stereotype.Saga;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Saga
-@RequiredArgsConstructor
+@Slf4j
 public class AxonFirmBankingSaga {
 
-  private final RequestBankAccountInfoPort requestBankAccountInfoPort;
-  private final RequestFirmBankingPort requestFirmBankingPort;
-  private final CommandGateway commandGateway;
+  @Autowired
+  private transient RequestBankAccountInfoPort requestBankAccountInfoPort;
+  @Autowired
+  private transient RequestFirmBankingPort requestFirmBankingPort;
+  @Autowired
+  private transient CommandGateway commandGateway;
 
+  @StartSaga
   @SagaEventHandler(associationProperty = "aggregateId")
   public void on(AxonCreateFirmBankingRequestEvent event) {
+    log.info("AxonCreateFirmBankingRequestEvent Saga Handler >>> {}", event);
     var fromBankData = requestBankAccountInfoPort.requestBankAccountInfo(
         new BankAccountPayload(event.fromBankName(), event.fromBankAccountNumber())
     );
@@ -46,6 +56,12 @@ public class AxonFirmBankingSaga {
         sendErrorStatusCommand(event.aggregateId(), "failed to request firm banking.");
       }
     }
+  }
+
+  @EndSaga
+  @SagaEventHandler(associationProperty = "aggregateId")
+  public void on(AxonUpdateFirmBankingRequestStatusEvent event) {
+    log.info("Saga ended: {}", event.aggregateId());
   }
 
   private void sendSuccessStatusCommand(String aggregateId) {

@@ -84,3 +84,36 @@ CREATE TABLE banking.token_entry (
    token_type VARCHAR(255),
    PRIMARY KEY (processor_name, segment)
 );
+
+alter table banking.firm_banking_request add column event_stream_id varchar(255);
+
+create table banking.saga_entry (
+    saga_id varchar(255) not null,
+    saga_type varchar(255),
+    revision varchar(255),
+    serialized_saga blob,
+    primary key (saga_id)
+);
+
+CREATE TABLE banking.association_value_entry (
+     id BIGINT NOT NULL,
+     association_key VARCHAR(255) NOT NULL,
+     association_value VARCHAR(255),
+     saga_id VARCHAR(255) NOT NULL,
+     saga_type VARCHAR(255),
+     PRIMARY KEY (id),
+     INDEX idx_assoc_key_value (association_key, association_value),
+     INDEX idx_saga_id_type (saga_id, saga_type)
+);
+
+CREATE TABLE banking.association_value_entry_seq (
+    next_val BIGINT
+);
+
+INSERT INTO banking.association_value_entry_seq VALUES (1);
+
+CREATE TABLE banking.saga_entry_seq (
+    next_val BIGINT
+);
+
+INSERT INTO banking.saga_entry_seq VALUES (1);
