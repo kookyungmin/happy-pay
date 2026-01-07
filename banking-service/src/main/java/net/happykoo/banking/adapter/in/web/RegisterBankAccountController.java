@@ -30,4 +30,19 @@ public class RegisterBankAccountController {
         .build();
     return ResponseEntity.ok(registerBankAccountUseCase.registerBankAccount(command));
   }
+
+  @PostMapping("/banking/account-eda")
+  ResponseEntity<Void> registerBankAccountByEvent(
+      @RequestBody RegisterBankAccountRequest request
+  ) {
+
+    var command = RegisterBankAccountCommand.builder()
+        .membershipId(request.membershipId())
+        .bankName(request.bankName())
+        .bankAccountNumber(request.bankAccountNumber())
+        .build();
+    registerBankAccountUseCase.registerBankAccountByEvent(command);
+
+    return ResponseEntity.ok().build();
+  }
 }

@@ -7,7 +7,8 @@ public record AxonUpdateFirmBankingRequestStatusCommand(
     @TargetAggregateIdentifier
     String aggregateId,
     FirmBankingRequestStatus status,
-    String errorMessage
+    String errorMessage,
+    String firmBankingRequestId
 ) {
 
 }

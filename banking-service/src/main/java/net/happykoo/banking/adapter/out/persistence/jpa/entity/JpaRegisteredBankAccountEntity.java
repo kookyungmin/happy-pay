@@ -21,13 +21,15 @@ public class JpaRegisteredBankAccountEntity {
   private String bankName;
   private String bankAccountNumber;
   private boolean isValid;
+  private String eventStreamId;
 
   public JpaRegisteredBankAccountEntity(
       Long id,
       String membershipId,
       String bankName,
       String bankAccountNumber,
-      boolean isValid
+      boolean isValid,
+      String eventStreamId
   ) {
     this.id = id;
     this.membershipId = membershipId;
@@ -40,8 +42,9 @@ public class JpaRegisteredBankAccountEntity {
       String membershipId,
       String bankName,
       String bankAccountNumber,
-      boolean isValid
+      boolean isValid,
+      String eventStreamId
   ) {
-    this(null, membershipId, bankName, bankAccountNumber, isValid);
+    this(null, membershipId, bankName, bankAccountNumber, isValid, eventStreamId);
   }
 }

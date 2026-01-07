@@ -15,16 +15,19 @@ public class UpdateFirmBankingStatusCommand extends SelfValidating<UpdateFirmBan
   private final String eventStreamId;
   private final FirmBankingRequestStatus status;
   private final String errorMessage;
+  private final String firmBankingRequestId;
 
   @Builder
   public UpdateFirmBankingStatusCommand(
       String eventStreamId,
       FirmBankingRequestStatus status,
-      String errorMessage
+      String errorMessage,
+      String firmBankingRequestId
   ) {
     this.eventStreamId = eventStreamId;
     this.status = status;
     this.errorMessage = errorMessage;
+    this.firmBankingRequestId = firmBankingRequestId;
 
     validateSelf();
   }

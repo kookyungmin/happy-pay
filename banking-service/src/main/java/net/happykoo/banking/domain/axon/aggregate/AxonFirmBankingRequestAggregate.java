@@ -31,6 +31,7 @@ public class AxonFirmBankingRequestAggregate {
   private int moneyAmount;
   private FirmBankingRequestStatus requestStatus;
   private String errorMsg;
+  private String firmBankingRequestId;
 
   @CommandHandler
   public AxonFirmBankingRequestAggregate(AxonCreateFirmBankingRequestCommand command) {
@@ -42,7 +43,8 @@ public class AxonFirmBankingRequestAggregate {
         command.fromBankAccountNumber(),
         command.toBankName(),
         command.toBankAccountNumber(),
-        command.moneyAmount()
+        command.moneyAmount(),
+        command.firmBankingRequestId()
     ));
   }
 
@@ -57,6 +59,7 @@ public class AxonFirmBankingRequestAggregate {
     this.toBankAccountNumber = event.toBankAccountNumber();
     this.moneyAmount = event.moneyAmount();
     this.requestStatus = FirmBankingRequestStatus.SUCCESS;
+    this.firmBankingRequestId = event.firmBankingRequestId();
   }
 
   @CommandHandler
@@ -66,7 +69,8 @@ public class AxonFirmBankingRequestAggregate {
     apply(new AxonUpdateFirmBankingRequestStatusEvent(
         command.aggregateId(),
         command.status(),
-        command.errorMessage()
+        command.errorMessage(),
+        command.firmBankingRequestId()
     ));
   }
 
@@ -76,5 +80,6 @@ public class AxonFirmBankingRequestAggregate {
 
     this.requestStatus = event.status();
     this.errorMsg = event.errorMessage();
+    this.firmBankingRequestId = event.firmBankingRequestId();
   }
 }

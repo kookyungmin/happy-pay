@@ -6,7 +6,8 @@ public record AxonCreateFirmBankingRequestEvent(
     String fromBankAccountNumber,
     String toBankName,
     String toBankAccountNumber,
-    int moneyAmount
+    int moneyAmount,
+    String firmBankingRequestId
 
 ) {
 

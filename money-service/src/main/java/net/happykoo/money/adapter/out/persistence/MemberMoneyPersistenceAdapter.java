@@ -37,4 +37,9 @@ public class MemberMoneyPersistenceAdapter implements ChangeMemberMoneyPort, Fin
             () -> new EntityNotFoundException("entity does not exist : " + membershipId.value()));
     return memberMoneyMapper.mapToDomainEntity(entity);
   }
+
+  @Override
+  public boolean existsMemberMoneyByMembershipId(MembershipId membershipId) {
+    return jpaMemberMoneyRepository.existsByMembershipId(membershipId.value());
+  }
 }

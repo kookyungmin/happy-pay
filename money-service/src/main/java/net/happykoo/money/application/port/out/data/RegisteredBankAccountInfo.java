@@ -1,26 +1,16 @@
 package net.happykoo.money.application.port.out.data;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Builder
-public class MembershipData {
+@AllArgsConstructor
+public class RegisteredBankAccountInfo {
 
   private String membershipId;
-
-  private String name;
-
-  private String email;
-
-  private String address;
-
+  private String bankName;
+  private String bankAccountNumber;
   private boolean isValid;
-
-  private boolean isCorp;
 }

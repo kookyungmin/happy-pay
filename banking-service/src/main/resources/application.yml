@@ -16,6 +16,7 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
   kafka:
+    group-id: banking-service
     bootstrap-servers: [ "localhost:29094" ]
 logging:
   topic: happypay.logging.out.stdout
@@ -25,6 +26,9 @@ logging:
         orm:
           jdbc:
             bind: TRACE
+task:
+  firm-banking-topic: happypay.task.firmbanking
+  firm-banking-result-topic: happypay.task.firmbanking.result
 axon:
   axonserver:
     servers: localhost:18124

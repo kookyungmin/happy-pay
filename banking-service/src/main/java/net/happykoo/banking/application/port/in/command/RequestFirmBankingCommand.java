@@ -29,19 +29,24 @@ public class RequestFirmBankingCommand extends SelfValidating<RequestFirmBanking
 
   private int moneyAmount;
 
+  private String externalRequestId; //외부 요청 시 Saga Associate Property
+
+
   @Builder
   public RequestFirmBankingCommand(
       String fromBankName,
       String fromBankAccountNumber,
       String toBankName,
       String toBankAccountNumber,
-      int moneyAmount
+      int moneyAmount,
+      String externalRequestId
   ) {
     this.fromBankName = fromBankName;
     this.fromBankAccountNumber = fromBankAccountNumber;
     this.toBankName = toBankName;
     this.toBankAccountNumber = toBankAccountNumber;
     this.moneyAmount = moneyAmount;
+    this.externalRequestId = externalRequestId;
 
     validateSelf();
   }

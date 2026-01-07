@@ -19,13 +19,6 @@ public class AxonMemberMoneyProjection {
   @EventHandler
   public void on(AxonCreateMemberMoneyEvent event) {
     log.info("AxonCreateMemberMoneyEvent Handler >>> {}", event);
-    var isExists = jpaMemberMoneyRepository.existsByMembershipId(
-        String.valueOf(event.membershipId()));
-
-    if (isExists) {
-      throw new IllegalArgumentException("entity already exists : " + event.membershipId());
-    }
-
     var entity = new JpaMemberMoneyEntity(
         String.valueOf(event.membershipId()),
         0,
@@ -37,12 +30,14 @@ public class AxonMemberMoneyProjection {
   @EventHandler
   public void on(AxonIncreaseMemberMoneyEvent event) {
     log.info("AxonIncreaseMemberMoneyEvent Handler >>> {}", event);
-    var entity = jpaMemberMoneyRepository.findByMembershipId(String.valueOf(event.membershipId()))
-        .orElseThrow(
-            () -> new IllegalArgumentException("entity does not exist : " + event.membershipId()));
-
-    entity.setBalance(entity.getBalance() + event.moneyAmount());
-
-    jpaMemberMoneyRepository.save(entity);
+    jpaMemberMoneyRepository.findByMembershipId(String.valueOf(event.membershipId()))
+        .ifPresentOrElse(
+            entity -> {
+              entity.setBalance(entity.getBalance() + event.moneyAmount());
+              jpaMemberMoneyRepository.save(entity);
+            }, () -> {
+              log.error("entity does not exists : {}", event.membershipId());
+            }
+        );
   }
 }

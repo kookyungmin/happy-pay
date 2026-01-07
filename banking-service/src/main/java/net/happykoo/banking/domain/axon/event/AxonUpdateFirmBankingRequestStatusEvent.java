@@ -5,7 +5,8 @@ import net.happykoo.banking.domain.FirmBankingRequestStatus;
 public record AxonUpdateFirmBankingRequestStatusEvent(
     String aggregateId,
     FirmBankingRequestStatus status,
-    String errorMessage
+    String errorMessage,
+    String firmBankingRequestId
 ) {
 
 }

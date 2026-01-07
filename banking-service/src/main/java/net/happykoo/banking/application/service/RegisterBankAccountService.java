@@ -1,6 +1,9 @@
 package net.happykoo.banking.application.service;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.happykoo.banking.application.axon.command.AxonCreateRegisteredBankAccountCommand;
 import net.happykoo.banking.application.port.in.RegisterBankAccountUseCase;
 import net.happykoo.banking.application.port.in.command.RegisterBankAccountCommand;
 import net.happykoo.banking.application.port.out.FindBankAccountPort;
@@ -10,15 +13,18 @@ import net.happykoo.banking.application.port.out.RequestMembershipInfoPort;
 import net.happykoo.banking.application.port.out.payload.BankAccountPayload;
 import net.happykoo.banking.domain.RegisteredBankAccount;
 import net.happykoo.common.annotation.UseCase;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 
 @UseCase
 @RequiredArgsConstructor
+@Slf4j
 public class RegisterBankAccountService implements RegisterBankAccountUseCase {
 
   private final RegisterBankAccountPort registerBankAccountPort;
   private final FindBankAccountPort findBankAccountPort;
   private final RequestBankAccountInfoPort requestBankAccountInfoPort;
   private final RequestMembershipInfoPort requestMembershipInfoPort;
+  private final CommandGateway commandGateway;
 
   @Override
   public RegisteredBankAccount registerBankAccount(RegisterBankAccountCommand command) {
@@ -50,5 +56,22 @@ public class RegisterBankAccountService implements RegisterBankAccountUseCase {
         new RegisteredBankAccount.BankName(command.getBankName()),
         new RegisteredBankAccount.BankAccountNumber(command.getBankAccountNumber())
     );
+  }
+
+  @Override
+  public void registerBankAccountByEvent(RegisterBankAccountCommand command) {
+    var axonCreateRegisteredBankAccountCommand = new AxonCreateRegisteredBankAccountCommand(
+        UUID.randomUUID().toString(),
+        command.getMembershipId(),
+        command.getBankName(),
+        command.getBankAccountNumber()
+    );
+
+    commandGateway.send(axonCreateRegisteredBankAccountCommand)
+        .whenComplete((r, ex) -> {
+          if (ex != null) {
+            log.error("AxonCreateRegisteredBankAccountCommand failed", ex);
+          }
+        });
   }
 }

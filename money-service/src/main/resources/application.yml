@@ -21,6 +21,8 @@ spring:
 task:
   recharge-topic: happypay.task.recharge
   recharge-result-topic: happypay.task.recharge.result
+  firm-banking-topic: happypay.task.firmbanking
+  firm-banking-result-topic: happypay.task.firmbanking.result
 logging:
   topic: happypay.logging.out.stdout
   level:

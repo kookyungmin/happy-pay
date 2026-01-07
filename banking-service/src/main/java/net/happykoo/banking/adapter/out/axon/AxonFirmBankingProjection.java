@@ -36,14 +36,17 @@ public class AxonFirmBankingProjection {
 
   @EventHandler
   public void on(AxonUpdateFirmBankingRequestStatusEvent event) {
-    JpaFirmBankingRequestEntity entity = jpaFirmBankingRequestRepository.findByEventStreamId(
+    jpaFirmBankingRequestRepository.findByEventStreamId(
             event.aggregateId())
-        .orElseThrow(
-            () -> new EntityNotFoundException("entity does not exists : " + event.aggregateId()));
+        .ifPresentOrElse(
+            entity -> {
+              entity.setStatus(event.status());
+              entity.setErrorMsg(event.errorMessage());
 
-    entity.setStatus(event.status());
-    entity.setErrorMsg(event.errorMessage());
-
-    jpaFirmBankingRequestRepository.save(entity);
+              jpaFirmBankingRequestRepository.save(entity);
+            }, () -> {
+              log.error("entity does not exists : {}", event.aggregateId());
+            }
+        );
   }
 }

@@ -1,6 +1,8 @@
 package net.happykoo.money.application.port.in;
 
+import net.happykoo.money.adapter.in.web.request.RechargeMoneyRequest;
 import net.happykoo.money.application.port.in.command.IncreaseMoneyRequestCommand;
+import net.happykoo.money.application.port.in.command.RechargeMoneyRequestCommand;
 import net.happykoo.money.domain.MoneyChangingRequest;
 
 public interface IncreaseMoneyRequestUseCase {
@@ -9,4 +11,6 @@ public interface IncreaseMoneyRequestUseCase {
 
   void increaseMoneyRequestByEvent(
       IncreaseMoneyRequestCommand command);
+
+  void rechargeMoneyRequestByEvent(RechargeMoneyRequestCommand command);
 }

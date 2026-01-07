@@ -17,6 +17,7 @@ import net.happykoo.money.application.port.in.IncreaseMoneyRequestUseCase;
 import net.happykoo.money.application.port.in.ProcessRechargingMoneyResultTaskUseCase;
 import net.happykoo.money.application.port.in.command.CreateMemberMoneyCommand;
 import net.happykoo.money.application.port.in.command.IncreaseMoneyRequestCommand;
+import net.happykoo.money.application.port.in.command.RechargeMoneyRequestCommand;
 import net.happykoo.money.application.port.out.ChangeMemberMoneyPort;
 import net.happykoo.money.application.port.out.FindMemberMoneyPort;
 import net.happykoo.money.application.port.out.SaveMoneyChangingRequestPort;
@@ -24,7 +25,9 @@ import net.happykoo.money.application.port.out.SendRechargingMoneyTaskPort;
 import net.happykoo.money.domain.MemberMoney;
 import net.happykoo.money.domain.MoneyChangingRequest;
 import net.happykoo.money.domain.MoneyChangingRequestType;
+import net.happykoo.money.domain.axon.event.AxonRechargeMoneyEvent;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.eventhandling.gateway.EventGateway;
 
 @Slf4j
 @UseCase
@@ -41,6 +44,7 @@ public class MoneyChangingRequestService implements IncreaseMoneyRequestUseCase,
   private final CountDownLatchManager countDownLatchManager;
   private final LoggingProducer loggingProducer;
   private final CommandGateway commandGateway;
+  private final EventGateway eventGateway;
 
   @Override
   public MoneyChangingRequest increaseMoneyRequest(IncreaseMoneyRequestCommand command) {
@@ -145,6 +149,14 @@ public class MoneyChangingRequestService implements IncreaseMoneyRequestUseCase,
 
   @Override
   public void createMemberMoney(CreateMemberMoneyCommand command) {
+    boolean isExists = findMemberMoneyPort.existsMemberMoneyByMembershipId(
+        new MemberMoney.MembershipId(command.getMembershipId())
+    );
+
+    if (isExists) {
+      throw new IllegalArgumentException("entity already exists : " + command.getMembershipId());
+    }
+
     AxonCreateMemberMoneyCommand axonCreateMemberMoneyCommand = new AxonCreateMemberMoneyCommand(
         UUID.randomUUID().toString(),
         Long.parseLong(command.getMembershipId())
@@ -189,5 +201,17 @@ public class MoneyChangingRequestService implements IncreaseMoneyRequestUseCase,
             log.error("IncreaseMoneyRequestByEvent failed", ex);
           }
         });
+  }
+
+  //뱅킹 서비스 사가 연동 용
+  @Override
+  public void rechargeMoneyRequestByEvent(RechargeMoneyRequestCommand command) {
+    var axonRechargeMoneyEvent = new AxonRechargeMoneyEvent(
+        UUID.randomUUID().toString(),
+        Long.parseLong(command.getTargetMembershipId()),
+        command.getMoneyAmount()
+    );
+
+    eventGateway.publish(axonRechargeMoneyEvent);
   }
 }

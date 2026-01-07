@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import net.happykoo.common.annotation.WebAdapter;
 import net.happykoo.money.adapter.in.web.request.CreateMemberMoneyRequest;
 import net.happykoo.money.adapter.in.web.request.IncreaseMoneyRequest;
+import net.happykoo.money.adapter.in.web.request.RechargeMoneyRequest;
 import net.happykoo.money.application.port.in.CreateMemberMoneyUseCase;
 import net.happykoo.money.application.port.in.IncreaseMoneyRequestUseCase;
 import net.happykoo.money.application.port.in.command.CreateMemberMoneyCommand;
 import net.happykoo.money.application.port.in.command.IncreaseMoneyRequestCommand;
+import net.happykoo.money.application.port.in.command.RechargeMoneyRequestCommand;
 import net.happykoo.money.domain.MoneyChangingRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +41,19 @@ public class RequestMoneyChangingController {
   ) {
     increaseMoneyRequestUseCase.increaseMoneyRequestByEvent(
         new IncreaseMoneyRequestCommand(
+            request.targetMembershipId(),
+            request.moneyAmount()
+        )
+    );
+    return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("/money/recharge-eda")
+  ResponseEntity<MoneyChangingRequest> rechargeMoneyRequestByEvent(
+      @RequestBody IncreaseMoneyRequest request
+  ) {
+    increaseMoneyRequestUseCase.rechargeMoneyRequestByEvent(
+        new RechargeMoneyRequestCommand(
             request.targetMembershipId(),
             request.moneyAmount()
         )

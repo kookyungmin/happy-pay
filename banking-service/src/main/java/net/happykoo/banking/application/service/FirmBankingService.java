@@ -24,8 +24,10 @@ import net.happykoo.banking.domain.FirmBankingRequest.MoneyAmount;
 import net.happykoo.banking.domain.FirmBankingRequest.RequestStatus;
 import net.happykoo.banking.domain.FirmBankingRequest.ToBankAccountNumber;
 import net.happykoo.banking.domain.FirmBankingRequest.ToBankName;
+import net.happykoo.banking.domain.axon.event.AxonFirmBankingRequestEvent;
 import net.happykoo.common.annotation.UseCase;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.eventhandling.gateway.EventGateway;
 
 @UseCase
 @RequiredArgsConstructor
@@ -38,6 +40,7 @@ public class FirmBankingService implements RequestFirmBankingUseCase,
   private final RequestFirmBankingPort requestFirmBankingPort;
 
   private final CommandGateway commandGateway;
+  private final EventGateway eventGateway;
 
   @Override
   @Transactional
@@ -88,26 +91,22 @@ public class FirmBankingService implements RequestFirmBankingUseCase,
 
   @Override
   public void requestFirmBankingByEvent(RequestFirmBankingCommand command) {
-    AxonCreateFirmBankingRequestCommand axonCreateFirmBankingRequestCommand = new AxonCreateFirmBankingRequestCommand(
+
+    AxonFirmBankingRequestEvent event = new AxonFirmBankingRequestEvent(
         UUID.randomUUID().toString(),
         command.getFromBankName(),
         command.getFromBankAccountNumber(),
         command.getToBankName(),
         command.getToBankAccountNumber(),
-        command.getMoneyAmount()
+        command.getMoneyAmount(),
+        command.getExternalRequestId()
     );
 
     //1. CreateFirmBankingRequestEvent -> EventStore 에 저장
     //2. Projection -> JPA 로 읽기용 DB 에 데이터 저장
     //3. Saga -> 계좌 유효상태 확인 및 펌뱅킹 실행 -> 성공/실패 여부에 따라 분기하여 Command 발송
     //4. Projection -> JPA 로 읽기용 DB 에 status 저장
-    commandGateway.send(axonCreateFirmBankingRequestCommand)
-        .whenComplete((result, throwable) -> {
-          if (throwable != null) {
-            log.error("AxonCreateFirmBankingRequestCommand failed", throwable);
-          }
-        });
-
+    eventGateway.publish(event);
   }
 
   @Override
@@ -115,7 +114,8 @@ public class FirmBankingService implements RequestFirmBankingUseCase,
     AxonUpdateFirmBankingRequestStatusCommand axonUpdateFirmBankingRequestStatusCommand = new AxonUpdateFirmBankingRequestStatusCommand(
         command.getEventStreamId(),
         command.getStatus(),
-        command.getErrorMessage()
+        command.getErrorMessage(),
+        command.getFirmBankingRequestId()
     );
 
     commandGateway.send(axonUpdateFirmBankingRequestStatusCommand)

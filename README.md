@@ -130,6 +130,34 @@ Axon Framework 로 EDA(Event Data Architecture) 를 구축하고,
 Axon Server(오케스트레이터)가 EventStore 를 통해 Aggregate 의 변경 이력(Event)들을 저장한다. 
 
 
+Kafka 를 활용한 Saga Pattern 충전 프로세스
+
+```
+//1. 해피 페이 충전 요청 [머니 서비스]
+
+//2. AxonRechargeMoneyEvent Publish (Saga Start) [머니 서비스]
+
+//3. 뱅크 서비스로 계좌 상태 확인 [머니 서비스 -> 뱅킹 서비스로의 HTTP Request]
+
+//3-1. 계좌 상태 정상 아니면, Sage End [머니 서비스]
+
+//3-2. 계좌 상태 정상이면, 개인 계좌 -> 법인 계좌 송금 신청 [머니 서비스 -> 뱅킹 서비스로의 Kafka Event Produce]
+// ㄴ 3-2-1. Kakfa Producer -> 펌뱅킹 Event Produce (topic: happypay.task.firmbanking) [머니 서비스]
+// ㄴ 3-2-2. Kakfa Consumer -> 펌뱅킹 Event Consume (topic: happypay.task.firmbanking) [뱅킹 서비스]
+// ㄴ 3-2.3. AxonFirmBankingRequestEvent Publish (Saga Start) [뱅킹 서비스]
+// ㄴ 3-2.4. 펌 뱅킹 비즈니스 로직 수행 완료 (Sage End) [뱅킹 서비스]
+
+
+
+//3. AxonIncreaseMemberMoneyCommand Send  -- 머니 서비스
+//4. AxonIncreaseMemberMoneyEvent Apply -- 머니 서비스
+//5-1. AxonMemberMoneyProjection Event Handler 에서 Read DB update -- 머니 서비스
+//5-2. AxonMoneyRechargeSaga AxonCheckRegisteredBankAccountCommand Send -- 머니 서비스
+
+
+```
+
+
 
 ### Kafka 명령
 
@@ -165,7 +193,21 @@ kafka-topics --create --bootstrap-server localhost:9092 \
     --topic happypay.task.recharge.result
 ```
 
+```
+kafka-topics --create --bootstrap-server localhost:9092 \
+    --partitions 1  \
+    --replication-factor 1 \
+    --config min.insync.replicas=1 \
+    --topic happypay.task.firmbanking
+```
 
+```
+kafka-topics --create --bootstrap-server localhost:9092 \
+    --partitions 1  \
+    --replication-factor 1 \
+    --config min.insync.replicas=1 \
+    --topic happypay.task.firmbanking.result
+```
 
 
 

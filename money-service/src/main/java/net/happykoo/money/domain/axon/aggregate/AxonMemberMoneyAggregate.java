@@ -13,6 +13,7 @@ import net.happykoo.money.domain.axon.event.AxonIncreaseMemberMoneyEvent;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
+import org.axonframework.modelling.saga.SagaLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 
 @Aggregate
@@ -23,6 +24,8 @@ public class AxonMemberMoneyAggregate {
 
   @AggregateIdentifier
   private String id;
+
+  private String rechargingRequestId;
 
   private Long membershipId;
 
@@ -35,6 +38,16 @@ public class AxonMemberMoneyAggregate {
     apply(new AxonCreateMemberMoneyEvent(command.aggregateId(), command.membershipId()));
   }
 
+  @EventSourcingHandler
+  public void on(AxonCreateMemberMoneyEvent event) {
+    log.info("AxonCreateMemberMoneyEvent Sourcing Handler >>> {}", event);
+
+    this.id = event.aggregateId();
+    this.membershipId = event.membershipId();
+    this.balance = 0;
+    this.rechargingRequestId = null;
+  }
+
   @CommandHandler
   public void increaseBalance(AxonIncreaseMemberMoneyCommand command) {
     log.info("AxonIncreaseMemberMoneyCommand Handler >>> {}", command);
@@ -43,20 +56,12 @@ public class AxonMemberMoneyAggregate {
   }
 
   @EventSourcingHandler
-  public void on(AxonCreateMemberMoneyEvent event) {
-    log.info("AxonCreateMemberMoneyEvent Sourcing Handler >>> {}", event);
-
-    this.id = event.aggregateId();
-    this.membershipId = event.membershipId();
-    this.balance = 0;
-  }
-
-  @EventSourcingHandler
   public void on(AxonIncreaseMemberMoneyEvent event) {
     log.info("AxonIncreaseMemberMoneyEvent Sourcing Handler >>> {}", event);
 
     this.id = event.aggregateId();
     this.membershipId = event.membershipId();
-    this.balance = event.moneyAmount();
+    this.balance += event.moneyAmount();
+    this.rechargingRequestId = null;
   }
 }

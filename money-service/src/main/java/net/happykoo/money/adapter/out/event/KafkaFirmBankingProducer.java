@@ -5,34 +5,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.happykoo.common.annotation.EventAdapter;
-import net.happykoo.common.task.RechargingMoneyTask;
-import net.happykoo.money.application.port.out.SendRechargingMoneyTaskPort;
+import net.happykoo.money.application.port.out.FirmBankingPort;
+import net.happykoo.money.application.port.out.payload.FirmBankingPayload;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.kafka.core.KafkaTemplate;
 
 @EventAdapter
 @RequiredArgsConstructor
-@EnableConfigurationProperties(TaskProps.class)
+@EnableConfigurationProperties(KafkaTopicProps.class)
 @Slf4j
-public class TaskProducer implements SendRechargingMoneyTaskPort {
+public class KafkaFirmBankingProducer implements FirmBankingPort {
 
   private final KafkaTemplate<String, String> kafkaTemplate;
-  private final TaskProps taskProps;
+  private final KafkaTopicProps kafkaTopicProps;
   private final ObjectMapper objectMapper;
 
   @Override
-  public void sendRechargingMoneyTask(RechargingMoneyTask task) {
+  public void firmBanking(FirmBankingPayload payload) {
     try {
-      String key = task.getTaskId();
-      String value = objectMapper.writeValueAsString(task);
-      kafkaTemplate.send(taskProps.rechargeTopic(), key, value)
+      String key = payload.rechargingRequestId();
+      String value = objectMapper.writeValueAsString(payload);
+      kafkaTemplate.send(kafkaTopicProps.firmBankingTopic(), key, value)
           .whenComplete((result, ex) -> {
             if (ex != null) {
               //전송 실패
               log.error(
                   "Kafka send failed. topic={}, key={}",
-                  taskProps.rechargeTopic(),
+                  kafkaTopicProps.rechargeTopic(),
                   key,
                   ex
               );

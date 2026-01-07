@@ -30,7 +30,8 @@ public class RegisteredBankAccountPersistenceAdapter implements RegisterBankAcco
             membershipId.value(),
             bankName.value(),
             bankAccountNumber.value(),
-            true
+            true,
+            null
         ));
 
     return registeredBankAccountMapper.mapToDomainEntity(entity);
