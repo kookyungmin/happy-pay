@@ -86,6 +86,7 @@ CREATE TABLE banking.token_entry (
 );
 
 alter table banking.firm_banking_request add column event_stream_id varchar(255);
+alter table banking.registered_bank_account add column event_stream_id varchar(255);
 
 create table banking.saga_entry (
     saga_id varchar(255) not null,
@@ -149,5 +150,3 @@ CREATE TABLE money.saga_entry_seq (
 );
 
 INSERT INTO money.saga_entry_seq VALUES (1);
-
-alter table banking.registered_bank_account add column event_stream_id varchar(255);

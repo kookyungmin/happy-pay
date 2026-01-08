@@ -98,6 +98,14 @@ MSA, 헥사고날 아키텍처 기반 간편 결제 시스템
 
 ![Payment_Sequence_Example](image/Payment_Sequence_Example.png)
 
+```
+# 이미지 빌드
+./gradlew :payment-service:jibDockerBuild
+
+# 이미지 빌드 후 dockerhub push
+./gradle :payment-service:jib
+``
+
 ### Settlement Service
 
 완료된 결제 내역을 기준으로 가맹점에 정산된 금액을 입금하고, 수수료 수취를 위한 기능을 제공하는 서비스
