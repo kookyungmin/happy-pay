@@ -112,6 +112,14 @@ MSA, 헥사고날 아키텍처 기반 간편 결제 시스템
 
 ![Settlement_Sequence_Example](image/Settlement_Sequence_Example.png)
 
+```
+# 이미지 빌드
+./gradlew :settlement-service:jibDockerBuild
+
+# 이미지 빌드 후 dockerhub push
+./gradle :settlement-service:jib
+``
+
 
 ### Axon Framework
 
