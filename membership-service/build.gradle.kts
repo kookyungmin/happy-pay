@@ -3,6 +3,8 @@ description = "HappyPay Membership"
 
 dependencies {
     implementation(project(":common"))
+    //Vault
+    implementation("org.springframework.vault:spring-vault-core:3.2.0")
     //JWT 관련
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.jsonwebtoken:jjwt-impl:0.12.6")

@@ -1,4 +1,4 @@
-# Happy Pay
+# MSA Pay
 
 MSA, 헥사고날 아키텍처 기반 간편 결제 시스템
 
@@ -7,7 +7,6 @@ MSA, 헥사고날 아키텍처 기반 간편 결제 시스템
 ![Docker](https://shields.io/badge/docker-black?logo=docker&style=for-the-badge%22)
 ![Kafka](https://shields.io/badge/kafka-black?logo=apache-kafka&style=for-the-badge%22)
 ![Mysql](https://shields.io/badge/mysql-black?logo=mysql&style=for-the-badge%22)
-![Redis](https://shields.io/badge/redis-black?logo=redis&style=for-the-badge%22)
 <!-- prettier-ignore-end -->
 
 ### System Requirements
@@ -19,8 +18,8 @@ MSA, 헥사고날 아키텍처 기반 간편 결제 시스템
 - [kafka] 7.3.10
 - [kafka-ui] 0.7.2 
 - [zookeeper] 7.3.10
-- [redis] 7.2.5
 - [mysql] 8.0.33
+- [vault] 1.21.0
 
 ### Overview
 
@@ -223,5 +222,24 @@ kafka-topics --create --bootstrap-server localhost:9092 \
     --topic happypay.task.firmbanking.result
 ```
 
+### Vault Policy
+
+```
+path "sys/mounts/kv-v1" {
+    capabilities = ["update"]  
+}
+
+path "sys/mounts" {
+    capabilities = ["read"]  
+}
+
+path "kv-v1/*" {
+  capabilities = ["create", "update", "read", "delete", "list"]  
+}
+```
+
+```
+vault write auth/token/create policies=default
+```
 
 

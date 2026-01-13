@@ -176,6 +176,15 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: local
       SPRING_JPA_HIBERNATE_DDL_AUTO: none
+  vault:
+    image: hashicorp/vault:1.21.0
+    networks:
+      - happypay_network
+    ports:
+      - "18200:8200"
+    restart: always
+    cap_add:
+      - IPC_LOCK
 
 networks:
   happypay_network:

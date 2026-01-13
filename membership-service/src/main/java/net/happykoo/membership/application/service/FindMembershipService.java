@@ -7,6 +7,7 @@ import net.happykoo.membership.application.port.in.FindMembershipUseCase;
 import net.happykoo.membership.application.port.in.command.FindMembershipByAddressCommand;
 import net.happykoo.membership.application.port.in.command.FindMembershipCommand;
 import net.happykoo.membership.application.port.out.FindMembershipPort;
+import net.happykoo.membership.application.port.out.FindSecretValuePort;
 import net.happykoo.membership.domain.Membership;
 import net.happykoo.membership.domain.Membership.MembershipId;
 

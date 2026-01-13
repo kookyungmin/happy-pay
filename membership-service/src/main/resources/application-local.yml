@@ -6,6 +6,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   kafka:
     bootstrap-servers: [ "kafka:9092" ]
+  cloud:
+    vault:
+      host: vault
+      port: 8200
   # JPA 설정
   jpa:
     hibernate:
