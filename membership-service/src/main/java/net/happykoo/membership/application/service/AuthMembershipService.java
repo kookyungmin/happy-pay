@@ -13,6 +13,7 @@ import net.happykoo.membership.domain.JwtToken.RefreshToken;
 import net.happykoo.membership.domain.Membership;
 import net.happykoo.membership.domain.Membership.MembershipEmail;
 
+//TODO: 원래 인증 로직은 JWT 에 대한 의존성을 가지면 안됨 -> 추상화
 @UseCase
 @RequiredArgsConstructor
 public class AuthMembershipService implements AuthMembershipUseCase {
