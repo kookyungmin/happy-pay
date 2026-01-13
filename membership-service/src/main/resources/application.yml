@@ -25,3 +25,5 @@ logging:
         orm:
           jdbc:
             bind: TRACE
+jwt:
+  secret-key: thisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkey

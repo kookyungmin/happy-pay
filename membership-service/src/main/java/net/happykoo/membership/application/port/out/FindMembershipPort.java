@@ -9,4 +9,6 @@ public interface FindMembershipPort {
   Membership findMembership(Membership.MembershipId membershipId);
 
   List<Membership> findMembershipByAddress(Membership.MembershipAddress address);
+
+  Membership findMembershipByEmail(Membership.MembershipEmail email);
 }

@@ -12,6 +12,7 @@ import net.happykoo.membership.application.port.out.ModifyMembershipPort;
 import net.happykoo.membership.application.port.out.RegisterMembershipPort;
 import net.happykoo.membership.domain.Membership;
 import net.happykoo.membership.domain.Membership.MembershipAddress;
+import net.happykoo.membership.domain.Membership.MembershipEmail;
 import net.happykoo.membership.domain.Membership.MembershipId;
 
 @PersistenceAdapter
@@ -54,6 +55,13 @@ public class MembershipPersistenceAdapter implements RegisterMembershipPort, Fin
         .stream()
         .map(membershipMapper::mapToDomainEntity)
         .toList();
+  }
+
+  @Override
+  public Membership findMembershipByEmail(MembershipEmail email) {
+    return jpaMembershipRepository.findByEmail(email.value())
+        .map(membershipMapper::mapToDomainEntity)
+        .orElseThrow(() -> new EntityNotFoundException("member does not exist : " + email.value()));
   }
 
   @Override
