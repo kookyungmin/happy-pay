@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: membership-service
+  labels:
+    app: membership-service
+spec:
+  containers:
+  - name: membership-service
+    image: membership-service:latest

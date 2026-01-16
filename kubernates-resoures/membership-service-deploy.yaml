@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: membership-service
+  labels:
+    app: membership-service
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: membership-service
+      labels:
+        app: membership-service
+    spec:
+      containers:
+        - name: membership-service
+          image: membership-service
+  selector:
+    matchLabels:
+      app: membership-service
