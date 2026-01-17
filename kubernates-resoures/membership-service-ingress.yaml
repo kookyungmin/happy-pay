@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: membership-service-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: cloud.happykoo.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: membership-service
+                port:
+                  name: http
