@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: stag-membership-service
+resources:
+  - ../../base
+namespace: stag
+namePrefix: stag
+
+labels:
+  - pairs:
+      env: stag
+
+patches:
+  - path: deploy-replicas.yaml
+  - target:
+      kind: Ingress
+      name: membership-service-ingress
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: stag.membership-service.com
